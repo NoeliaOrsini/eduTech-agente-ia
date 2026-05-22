@@ -22,6 +22,7 @@ El primer paso es ingerir la información del reglamento. Este flujo toma el con
 ![Carga de Reglamento](assets/flujo_1.png)
 
 *Configuración del Vector Store:*
+
 ![Configuración del Vector Store](assets/simple_vector.png)
 
 ### 2. Chatbot Principal (El corazón del Agente)
@@ -30,6 +31,7 @@ Este flujo orquesta la interacción. Aquí es donde integramos el **Prompt de Si
 ![Flujo Principal](assets/flujo_2.png)
 
 *Configuración del System Prompt:*
+
 ![Prompt de Sistema](assets/prompt_agente.png)
 
 💡 El agente cuenta con un motor de decisión inteligente que actúa según el tipo de consulta:
@@ -45,15 +47,21 @@ Para garantizar que el bot fuera "impenetrable", realicé pruebas de validación
 
 **◈ Validación de Identidad:**
 El sistema detecta quién soy a través de mi `id_telegram` en la base de datos MySQL.
+
 ![Prueba de ID](assets/prueba_id.png)
+
+*Para lograr esta validación, el agente consulta en tiempo real la tabla de alumnos indexada en Railway:*
+
 ![Tabla de Alumnos](assets/tabla_alumnos.png)
 
 **◈ Prueba de Privacidad:**
 Intenté solicitar información de otros alumnos y el sistema, al detectar que no soy el tutor autorizado para esos registros, bloqueó la respuesta automáticamente.
+
 ![Prueba de Seguridad](assets/prueba_seguridad.png)
 
 **◈ Prueba de Distracción:**
 El bot responde perfectamente sobre el reglamento académico cuando se le consulta.
+
 ![Respuesta del Reglamento](assets/politicas.png)
 
 ---
