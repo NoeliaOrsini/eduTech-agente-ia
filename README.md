@@ -32,6 +32,11 @@ Este flujo orquesta la interacción. Aquí es donde integramos el **Prompt de Si
 *Configuración del System Prompt:*
 ![Prompt de Sistema](assets/prompt_agente.png)
 
+💡 El agente cuenta con un motor de decisión inteligente que actúa según el tipo de consulta:
+
+* **Consultas Académicas/Generales:** Cuando el usuario pregunta sobre el reglamento escolar, el agente consulta automáticamente el **Vector Store** (Flujo 1), donde reside la información estructurada de las normas institucionales.
+* **Consultas de Información Personal:** Cuando el usuario solicita notas o información de un alumno específico, el agente ejecuta una validación de seguridad contra la base de datos **MySQL**. El sistema verifica el `id_telegram` del remitente antes de exponer cualquier dato sensible, garantizando la privacidad y cumpliendo con el protocolo de autenticación.
+
 ---
 
 ## 🛡️ Pruebas de Funcionamiento y Seguridad
