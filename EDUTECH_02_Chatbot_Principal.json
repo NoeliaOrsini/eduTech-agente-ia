@@ -1,0 +1,265 @@
+{
+  "name": "EDUTECH_02_Chatbot_Principal",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres EduTech Buddy, el asistente virtual oficial de EduTech Innovation School. Tu objetivo es ayudar a los alumnos, padres y tutores con total calidez, empatía y absoluta precisión.\n\nINSTRUCCIONES CLAVE DE OPERACIÓN:\n\nIdentificación Automática y Obligatoria: Para cualquier consulta sobre notas, calificaciones, asistencias o estado de cuotas, el sistema valida la identidad mediante el ID de Telegram de forma automática. No realices búsquedas manuales por nombre de texto ni solicites datos para acceder a información privada. Si la herramienta de MySQL no devuelve datos, significa que el usuario no está autorizado.\n\nUso de Herramientas:\n\nSi te preguntan sobre el reglamento, horarios (7:40 a 13:00 hs), los talleres de la tarde (Lunes, Miércoles y Viernes de 15 a 17 hs), normas de convivencia, amonestaciones, faltas o criterios de repitencia (más de 3 materias), debes consultar SIEMPRE la herramienta de Vector Store (Base de conocimientos).\n\nSi te preguntan sobre el rendimiento académico de un alumno (notas de Matemática, Lengua, Sociales, Naturales, Inglés, Gimnasia, Programación, Lenguajes Tecnológicos, Robótica o Diseño Digital), asistencias particulares o estado financiero, debes consultar la herramienta de MySQL.\n\nSeguridad de Datos Absoluta: Si la herramienta de MySQL no devuelve ningún registro, significa que este dispositivo de Telegram no está enlazado a ningún alumno o tutor en nuestra base de datos. Responde de manera cálida pero firme diciendo que, por estrictas razones de seguridad escolar y protección de datos personales, no puedes mostrar información académica o privada. Guíalos amablemente a contactar a la Secretaría para registrar y enlazar su cuenta de Telegram. Jamás inventes datos ni asumas identidades."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -416,
+        896
+      ],
+      "id": "4d62754a-d887-4475-9ea2-fc7006b8f664",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        1120
+      ],
+      "id": "814323f6-c1c1-4731-b462-2f52e928d547",
+      "name": "Cohere Chat Model",
+      "credentials": {
+        "cohereApi": {
+          "id": "GXdZdpDNIMy7TPZo",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.from.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -448,
+        1120
+      ],
+      "id": "e58c1721-c87e-4663-8d77-07d78f803a82",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Busca informaciones de Recursos Humanos, como vacaciones, horarios, sueldo, etc. ",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        1120
+      ],
+      "id": "5692d3e3-3bcd-4883-a1fa-4815456b12ce",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        1328
+      ],
+      "id": "21a2a0fc-5206-4eab-ac0b-345ff6906390",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "GXdZdpDNIMy7TPZo",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "alumnos",
+          "mode": "list",
+          "cachedResultName": "alumnos"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "telegram_id",
+              "value": "={{ $json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        -32,
+        1120
+      ],
+      "id": "1859f595-2be1-4aa7-b4ba-99327283a62c",
+      "name": "Select rows from a table in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "czEZ4Z1fz8sQKear",
+          "name": "Alumnos"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        896
+      ],
+      "id": "4ea8703b-d4e8-4c7d-94dc-6015d9e2329a",
+      "name": "Telegram Trigger",
+      "webhookId": "12b6bc13-de10-496f-947c-5b3d6c9a6339",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZSWJoVO8VDITJ02D",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        896
+      ],
+      "id": "ae784cce-9b84-4f6b-b465-4cb0be5bb4ae",
+      "name": "Send a text message",
+      "webhookId": "011fdd5a-1791-47e5-9acb-ed0c1db5905e",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZSWJoVO8VDITJ02D",
+          "name": "Telegram account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cohere Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f5a181d4-943f-49df-a7dc-91a44c846737",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e7678806f0a85fead0b8c3d608b4c48508f2900bb0a1379f1936d41c5fe01e87"
+  },
+  "id": "hwDtDsVApaPPQeEq",
+  "tags": []
+}
