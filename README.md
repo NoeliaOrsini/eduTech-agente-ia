@@ -1,17 +1,21 @@
 # 🎓 Agente IA Edutech - EduTech Buddy
 
-Este proyecto nace como parte de la **#InmersionONE Agentes de IA**. El objetivo es proporcionar un asistente virtual inteligente para la comunidad educativa (**EduTech Innovation School**), capaz de gestionar consultas sobre inasistencias, notas y reglamentos escolares de forma segura y privada.
+Este proyecto nace como parte de la **#InmersionONE Agentes de IA**. Su objetivo es transformar la comunicación entre los colegios y las familias a través de la tecnología.
 
----
+* **El Problema:** Seguir el día a día escolar (inasistencias, notas, reglamentos, llegadas tarde) suele ser caótico para los padres debido a la dispersión de información en cuadernos de comunicaciones, mails y grupos de mensajería.
+* **La Solución:** Un **Asistente Escolar de IA 24/7** alojado en la nube. A través de una interfaz accesible, las familias pueden consultar de manera instantánea, segura y privada cualquier aspecto administrativo o de rendimiento de los alumnos, simplificando la gestión educativa.
 
-## 🛠️ Tecnologías Utilizadas
+Este proyecto une la Inteligencia Artificial y la automatización para simplificar la gestión educativa y mejorar la experiencia de la comunidad escolar.
 
-* **n8n:** Orquestador de flujos de trabajo.
-* **Cohere:** Modelo de lenguaje (LLM).
-* **Telegram API:** Interfaz de usuario.
-* **MySQL (Railway):** Almacenamiento de datos académicos vinculados por `id_telegram`.
-* **Gist (GitHub):** Gestión del reglamento escolar.
+--- 
 
+### 🛠️ Tecnologías y herramientas utilizadas:
+* **Automatización de Workflows y Orquestación:** **n8n** para la creación de flujos lógicos, procesamiento de consultas y conexión entre el asistente de IA y los datos.
+* **Inteligencia Artificial (LLM):** **Cohere** como el modelo de lenguaje encargado de interpretar las consultas de los padres y generar respuestas naturales y contextuales.
+* **Interfaz de Usuario (UI):** Bot de **Telegram (Telegram API)**, permitiendo a las familias interactuar de forma intuitiva desde sus celulares sin instalar aplicaciones complejas.
+* **Base de Datos (Storage):** **MySQL** para el almacenamiento estructurado y seguro de la información académica (calificaciones, asistencias y registros vinculados por `id_telegram`).
+* **Gestión de Conocimiento (Knowledge Base):** **GitHub Gist** utilizado para almacenar y disponibilizar de forma externa y actualizada el reglamento interno del colegio.
+* **Despliegue y Cloud (DevOps):** **Railway** para el hosting e infraestructura en la nube de la base de datos, garantizando que el servicio funcione de manera estable las 24 horas del día.
 ---
 
 ## 🏗️ Arquitectura y Flujos de Trabajo
